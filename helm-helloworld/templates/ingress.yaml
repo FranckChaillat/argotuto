@@ -11,7 +11,7 @@ metadata:
   {{- end }}
 spec:
   {{- with .Values.ingress.className }}
-  ingressClassName: {{ . }}
+   ingressClassName: {{ . }}
   {{- end }}
   {{- if .Values.ingress.tls }}
   tls:
@@ -23,35 +23,21 @@ spec:
       secretName: {{ .secretName }}
     {{- end }}
   {{- end }}
-  rules:
-    - http:
-        paths:
-          {{- range .Values.ingress.paths }}
-          - path: {{ .path }}
-            {{- with .pathType }}
-            pathType: {{ . }}
-            {{- end }}
-            backend:
-              service:
-                name: {{ include "helm-helloworld.fullname" $ }}
-                port:
-                  number: {{ $.Values.service.port }}
-          {{- end }}
-  # rules:
-  #   {{- range .Values.ingress.hosts }}
-  #   - host: {{ .host | quote }}
-  #     http:
-  #       paths:
-  #         {{- range .paths }}
-  #         - path: {{ .path }}
-  #           {{- with .pathType }}
-  #           pathType: {{ . }}
-  #           {{- end }}
-  #           backend:
-  #             service:
-  #               name: {{ include "helm-helloworld.fullname" $ }}
-  #               port:
-  #                 number: {{ $.Values.service.port }}
-  #         {{- end }}
-  #   {{- end }}
+   rules:
+     {{- range .Values.ingress.hosts }}
+     - host: {{ .host | quote }}
+       http:
+         paths:
+           {{- range .paths }}
+           - path: {{ .path }}
+             {{- with .pathType }}
+             pathType: {{ . }}
+             {{- end }}
+             backend:
+               service:
+                 name: {{ include "helm-helloworld.fullname" $ }}
+                 port:
+                   number: {{ $.Values.service.port }}
+           {{- end }}
+     {{- end }}
 {{- end }}
